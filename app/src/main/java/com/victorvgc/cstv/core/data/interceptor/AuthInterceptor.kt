@@ -1,4 +1,4 @@
-package com.victorvgc.cstv.core.data
+package com.victorvgc.cstv.core.data.interceptor
 
 import com.victorvgc.cstv.BuildConfig
 import okhttp3.Interceptor

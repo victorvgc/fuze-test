@@ -1,4 +1,4 @@
-package com.victorvgc.cstv.core.ui.theme
+package com.victorvgc.cstv.core.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import com.victorvgc.cstv.R
+import com.victorvgc.cstv.core.ui.theme.White
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

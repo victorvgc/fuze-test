@@ -1,7 +1,7 @@
 package com.victorvgc.cstv.core.di
 
 import com.victorvgc.cstv.BuildConfig
-import com.victorvgc.cstv.core.data.AuthInterceptor
+import com.victorvgc.cstv.core.data.interceptor.AuthInterceptor
 import com.victorvgc.cstv.core.utils.TIMEOUT
 import dagger.Module
 import dagger.Provides

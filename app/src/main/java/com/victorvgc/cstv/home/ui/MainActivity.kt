@@ -1,9 +1,11 @@
 package com.victorvgc.cstv.home.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,9 +23,10 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.victorvgc.cstv.R
-import com.victorvgc.cstv.core.ui.theme.BaseActivity
+import com.victorvgc.cstv.core.ui.BaseActivity
 import com.victorvgc.cstv.core.ui.theme.CSTVTheme
 import com.victorvgc.cstv.core.ui.theme.White
+import com.victorvgc.cstv.details.ui.DetailsActivity
 import com.victorvgc.cstv.home.domain.model.Match
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,7 +62,7 @@ class MainActivity : BaseActivity() {
     }
 
     @Composable
-    fun HomeScreen(context: Context, matches: LazyPagingItems<Match>) {
+    private fun HomeScreen(context: Context, matches: LazyPagingItems<Match>) {
         Column {
             Text(
                 modifier = Modifier.padding(24.dp),
@@ -87,7 +90,29 @@ class MainActivity : BaseActivity() {
                 items(count = matches.itemCount, key = { it }, contentType = { matches[it] }) {
                     val match = matches[it]
                     if (match != null && match.opponents.size == 2) {
-                        MatchItem(context = context, match = match)
+                        MatchItem(context = context, match = match, modifier = Modifier.clickable {
+                            Intent(this@MainActivity, DetailsActivity::class.java).apply {
+                                putExtra(
+                                    DetailsActivity.EXTRAS_LEAGUE_SERIES,
+                                    match.league.name + " " + match.serie.name
+                                )
+
+                                putExtra(DetailsActivity.EXTRAS_MATCH_DATE, match.beginAt)
+
+                                putExtra(
+                                    DetailsActivity.EXTRAS_TEAM_1_SLUG,
+                                    match.opponents[0].slug
+                                )
+
+                                putExtra(
+                                    DetailsActivity.EXTRAS_TEAM_2_SLUG,
+                                    match.opponents[1].slug
+                                )
+
+
+                                startActivity(this)
+                            }
+                        })
                     }
                 }
 
