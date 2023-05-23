@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CSTV</string>
+
+    <string name="fuze_logo">fuze</string>
+
+    <string name="matches">Partidas</string>
+    <string name="now">AGORA</string>
+    <string name="today">Hoje</string>
+    <string name="versus">vs</string>
+    <string name="to_be_announced">TBA</string>
 </resources>
