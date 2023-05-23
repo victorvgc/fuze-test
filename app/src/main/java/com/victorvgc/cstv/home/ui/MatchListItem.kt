@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -17,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -24,12 +27,16 @@ import com.victorvgc.cstv.R
 import com.victorvgc.cstv.core.ui.theme.Accent
 import com.victorvgc.cstv.core.ui.theme.GreyDark
 import com.victorvgc.cstv.core.ui.theme.WhiteAlpha20
+import com.victorvgc.cstv.core.utils.DateType
+import com.victorvgc.cstv.core.utils.getDateType
+import com.victorvgc.cstv.core.utils.toDate
+import com.victorvgc.cstv.core.utils.toDateString
 import com.victorvgc.cstv.home.domain.model.Match
 
 @Composable
 fun MatchItem(context: Context, match: Match) {
     Card(
-        modifier = Modifier.padding(24.dp),
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
         colors = CardDefaults.cardColors(
             containerColor = GreyDark
         )
@@ -45,8 +52,8 @@ fun MatchItem(context: Context, match: Match) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TeamDisplay(
-                logo = "https://seeklogo.com/images/M/mibr-logo-07C299F0C0-seeklogo.com.png",
-                name = "mibr"
+                logo = match.opponents[0].imageUrl,
+                name = match.opponents[0].name ?: ""
             )
             Spacer(modifier = Modifier.padding(5.dp))
             Text(
@@ -55,32 +62,56 @@ fun MatchItem(context: Context, match: Match) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             TeamDisplay(
-                logo = "https://seeklogo.com/images/M/mibr-logo-07C299F0C0-seeklogo.com.png",
-                name = "mibr"
+                logo = match.opponents[1].imageUrl,
+                name = match.opponents[1].name ?: ""
             )
         }
         Divider(color = WhiteAlpha20, thickness = 1.dp)
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.league_logo_placeholder),
-                contentDescription = "league"
-            )
+            if (match.league.imageUrl != null) {
+                AsyncImage(
+                    modifier = Modifier
+                        .width(16.dp)
+                        .height(16.dp),
+                    model = match.league.imageUrl, contentDescription = match.league.name,
+                    placeholder = painterResource(id = R.drawable.league_logo_placeholder),
+                    contentScale = ContentScale.FillBounds
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.league_logo_placeholder),
+                    contentDescription = match.league.name
+                )
+            }
             Spacer(modifier = Modifier.padding(4.dp))
-            Text(text = "League + series", style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = match.league.name + " " + match.serie.name,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
 
 @Composable
-fun TeamDisplay(logo: String, name: String) {
+fun TeamDisplay(logo: String?, name: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(18.dp)) {
-        AsyncImage(
-            model = logo,
-            contentDescription = name,
-            placeholder = painterResource(id = R.drawable.team_logo_placeholder),
-        )
+        if (logo != null) {
+            AsyncImage(
+                modifier = Modifier
+                    .width(60.dp)
+                    .height(60.dp),
+                model = logo,
+                contentDescription = name,
+                placeholder = painterResource(id = R.drawable.team_logo_placeholder),
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.team_logo_placeholder),
+                contentDescription = name
+            )
+        }
         Spacer(modifier = Modifier.padding(5.dp))
         Text(text = name, style = MaterialTheme.typography.bodyMedium)
     }
@@ -88,13 +119,24 @@ fun TeamDisplay(logo: String, name: String) {
 
 @Composable
 fun TimeDisplay(context: Context, match: Match) {
+    val color = if (match.beginAt.toDate()
+            .getDateType() == DateType.NOW || !match.live.url.isNullOrEmpty()
+    ) {
+        Accent
+    } else {
+        WhiteAlpha20
+    }
+
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Accent
+            containerColor = color
         ), shape = RoundedCornerShape(bottomStart = 16.dp, topEnd = 16.dp)
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
-            Text(text = "AGORA", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = match.beginAt.toDateString(context),
+                style = MaterialTheme.typography.labelSmall
+            )
         }
     }
 }
