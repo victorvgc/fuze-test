@@ -3,7 +3,6 @@ package com.victorvgc.cstv.home.ui.matches_list
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.victorvgc.cstv.core.utils.MAX_DATA_PER_PAGE
 import com.victorvgc.cstv.home.domain.model.Match
 import com.victorvgc.cstv.home.domain.use_case.GetRunningMatches
 import com.victorvgc.cstv.home.domain.use_case.GetUpcomingMatches
@@ -43,19 +42,11 @@ class MatchesPagingSource(
             allMatchesList.addAll(runningList)
             allMatchesList.addAll(upcomingList)
 
-            return if (allMatchesList.isNotEmpty()) {
-                LoadResult.Page(
-                    data = allMatchesList,
-                    prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
-                    nextKey = if (allMatchesList.size == MAX_DATA_PER_PAGE) nextPageNumber + 1 else null
-                )
-            } else {
-                LoadResult.Page(
-                    data = emptyList(),
-                    prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
-                    nextKey = null
-                )
-            }
+            LoadResult.Page(
+                data = allMatchesList,
+                prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
+                nextKey = if (allMatchesList.isNotEmpty()) nextPageNumber + 1 else null
+            )
 
         } catch (e: Exception) {
             Log.e("LOAD MATCHES", e.stackTraceToString())

@@ -12,7 +12,7 @@ fun String?.toDateString(
     inputFormat: String = "yyyy-MM-dd'T'HH:mm:SS'Z'",
     todayFormat: String = ", HH:mm",
     tomorrowFormat: String = "EEE, HH:mm",
-    otherDatesFormat: String = "DD.MM, HH:mm"
+    otherDatesFormat: String = "dd.MM, HH:mm"
 ): String {
     val formatFrom = SimpleDateFormat(inputFormat, Locale.getDefault())
     val formatToday = SimpleDateFormat(todayFormat, Locale.getDefault())

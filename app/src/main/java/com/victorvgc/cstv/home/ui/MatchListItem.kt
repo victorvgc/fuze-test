@@ -3,7 +3,6 @@ package com.victorvgc.cstv.home.ui
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.victorvgc.cstv.R
+import com.victorvgc.cstv.core.ui.TeamDisplay
 import com.victorvgc.cstv.core.ui.theme.Accent
 import com.victorvgc.cstv.core.ui.theme.GreyDark
 import com.victorvgc.cstv.core.ui.theme.WhiteAlpha20
@@ -34,9 +34,9 @@ import com.victorvgc.cstv.core.utils.toDateString
 import com.victorvgc.cstv.home.domain.model.Match
 
 @Composable
-fun MatchItem(context: Context, match: Match) {
+fun MatchItem(context: Context, match: Match, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+        modifier = modifier.padding(horizontal = 24.dp, vertical = 12.dp),
         colors = CardDefaults.cardColors(
             containerColor = GreyDark
         )
@@ -91,29 +91,6 @@ fun MatchItem(context: Context, match: Match) {
                 style = MaterialTheme.typography.bodySmall
             )
         }
-    }
-}
-
-@Composable
-fun TeamDisplay(logo: String?, name: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(18.dp)) {
-        if (logo != null) {
-            AsyncImage(
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp),
-                model = logo,
-                contentDescription = name,
-                placeholder = painterResource(id = R.drawable.team_logo_placeholder),
-            )
-        } else {
-            Image(
-                painter = painterResource(id = R.drawable.team_logo_placeholder),
-                contentDescription = name
-            )
-        }
-        Spacer(modifier = Modifier.padding(5.dp))
-        Text(text = name, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
